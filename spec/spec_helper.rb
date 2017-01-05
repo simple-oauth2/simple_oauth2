@@ -7,9 +7,6 @@ Bundler.setup
 require 'rack/test'
 require 'factory_girl'
 require 'ffaker'
-require 'pry'
-require 'awesome_print'
-require 'rspec/its'
 require 'coveralls'
 
 if Coveralls.should_run?

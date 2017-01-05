@@ -1,8 +1,7 @@
 module Twitter
   module Endpoints
-    module Base
+    module Token
       def call(env)
-        # if env['REQUEST_METHOD'] == 'POST' && env['PATH_INFO'] == '/oauth/token'
         response = Simple::OAuth2::Generators::Token.generate_for(env)
 
         status = response.status

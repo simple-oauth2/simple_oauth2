@@ -50,7 +50,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     if ENV['ORM'] == 'nobrainer'
-      NoBrainer.configure(&NOBRAINER_CONF)
       NoBrainer.purge!
       NoBrainer::Loader.cleanup
     end

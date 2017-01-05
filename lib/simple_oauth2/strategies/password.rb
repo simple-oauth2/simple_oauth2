@@ -5,6 +5,7 @@ module Simple
       # Processes request and respond with Access Token
       class Password < Base
         class << self
+          # Processes Password request
           def process(request)
             client = authenticate_client(request) || request.invalid_client!
             client.secret == request.client_secret || request.invalid_client!

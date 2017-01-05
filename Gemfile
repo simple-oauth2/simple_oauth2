@@ -14,7 +14,6 @@ group :test do
   gem 'ffaker'
   gem 'pry'
   gem 'rack-test', require: 'rack/test'
-  gem 'rspec-its', '~> 1.2'
   gem 'rspec-rails', '~> 3.4'
   gem 'rubocop', '~> 0.46.0', require: false
   gem 'simplecov', require: false

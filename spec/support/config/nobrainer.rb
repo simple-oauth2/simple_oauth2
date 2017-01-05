@@ -7,6 +7,5 @@ db_name = "#{ENV['ORM']}_#{ENV['RAILS_ENV']}"
 NOBRAINER_CONF = proc do |c|
   c.reset!
   c.rethinkdb_url = "rethinkdb://#{ENV['DB_HOST']}/#{db_name}"
-  c.environment = :test
-  c.logger = Logger.new(STDERR).tap { |l| l.level = ENV['DEBUG'] ? Logger::DEBUG : Logger::WARN }
+  c.environment = ENV['RAILS_ENV']
 end

@@ -6,7 +6,7 @@ module Simple
       include ClassAccessors
 
       # Currently supported (by the gem) OAuth2 grant types
-      SUPPORTED_GRANT_TYPES = %w(password authorization_code).freeze
+      SUPPORTED_GRANT_TYPES = %w(password authorization_code refresh_token).freeze
 
       # Default Access Token TTL (in seconds)
       DEFAULT_TOKEN_LIFETIME = 7200
@@ -78,17 +78,13 @@ module Simple
       #
       attr_accessor :issue_refresh_token
 
+      # Callback that would be invoked during processing of Refresh Token request for
+      # the original Access Token found by token value
+      attr_accessor :on_refresh
+
       # Return a new instance of Configuration with default options
       def initialize
         setup!
-      end
-
-      # Default Access Token authenticator block.
-      # Validates token value passed with the request params
-      def default_token_authenticator
-        lambda do |request|
-          access_token_class.authenticate(request.access_token) || request.invalid_token!
-        end
       end
 
       # Accessor for Access Token authenticator block. Set it to proc
@@ -98,6 +94,25 @@ module Simple
           instance_variable_set(:'@token_authenticator', block)
         else
           instance_variable_get(:'@token_authenticator')
+        end
+      end
+
+      # Indicates if on_refresh callback can be invoked.
+      #
+      # @return [Boolean]
+      #   true if callback can be invoked and false in other cases
+      #
+      def on_refresh_runnable?
+        !on_refresh.nil? && on_refresh != :nothing
+      end
+
+      # Accessor for on_refresh callback. Set callback proc
+      # if called with block or returns current value of the accessor.
+      def on_refresh(&block)
+        if block_given?
+          instance_variable_set(:'@on_refresh', block)
+        else
+          instance_variable_get(:'@on_refresh')
         end
       end
 
@@ -113,6 +128,7 @@ module Simple
         self.authorization_code_lifetime = DEFAULT_CODE_LIFETIME
         self.allowed_grant_types = SUPPORTED_GRANT_TYPES
         self.issue_refresh_token = DEFAULT_ISSUE_REFRESH_TOKEN
+        self.on_refresh = :nothing
 
         self.realm = DEFAULT_REALM
       end
@@ -134,6 +150,14 @@ module Simple
         self.resource_owner_class_name = DEFAULT_RESOURCE_OWNER_CLASS
         self.client_class_name = DEFAULT_CLIENT_CLASS
         self.access_grant_class_name = DEFAULT_ACCESS_GRANT_CLASS
+      end
+
+      # Default Access Token authenticator block.
+      # Validates token value passed with the request params
+      def default_token_authenticator
+        lambda do |request|
+          access_token_class.authenticate(request.access_token) || request.invalid_token!
+        end
       end
     end
   end

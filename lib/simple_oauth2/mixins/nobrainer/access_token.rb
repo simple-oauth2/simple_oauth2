@@ -48,9 +48,9 @@ module Simple
               create(client_id: client.id, resource_owner_id: resource_owner.id, scopes: scopes.to_s)
             end
 
-            def authenticate(token, type: :access_token)
+            def authenticate(token, type = nil)
               t = token.to_s
-              if type && type.to_sym == :refresh_token
+              if type.to_s == 'refresh_token'
                 where(refresh_token: t).first
               else
                 where(token: t).first

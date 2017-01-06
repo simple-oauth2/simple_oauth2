@@ -10,7 +10,7 @@ module Simple
             client = verify_client!(request)
 
             code = authenticate_access_grant(request) || request.invalid_grant!
-            code && code.redirect_uri == request.redirect_uri || request.invalid_grant!
+            code.redirect_uri == request.redirect_uri || request.invalid_grant!
 
             token = config.access_token_class.create_for(client, code.resource_owner, code.scopes)
             expose_to_bearer_token(token)

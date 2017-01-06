@@ -16,6 +16,7 @@ end
 # Authorization Grants aka Flows (Strategies)
 require 'simple_oauth2/strategies/base'
 require 'simple_oauth2/strategies/password'
+require 'simple_oauth2/strategies/authorization_code'
 
 # Generators
 require 'simple_oauth2/generators/base'

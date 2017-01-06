@@ -5,44 +5,50 @@ describe 'Token Endpoint' do
 
   let(:url) { '/oauth/token' }
   let(:client) { Client.create(attributes_for(:client)) }
-  let(:user) { User.create(attributes_for(:user)) }
-  let(:grant_type) { 'password' }
-  let(:scopes) { 'read,write' }
-  let(:username) { user.username }
-  let(:password) { user.encrypted_password }
+  let(:access_grant) { AccessGrant.create(attributes_for(:access_grant)) }
+  let(:redirect_uri) { access_grant.redirect_uri }
+  let(:grant_type) { 'authorization_code' }
   let(:client_id) { client.key }
   let(:client_secret) { client.secret }
+  let(:code) { access_grant.token }
   let(:params) do
     {
-      username: username,
-      password: password,
+      code: code,
+      redirect_uri: redirect_uri,
       client_id: client_id,
       client_secret: client_secret,
-      grant_type: grant_type,
-      scope: scopes
+      grant_type: grant_type
     }
   end
 
   describe 'POST /oauth/token' do
-    describe 'Password flow' do
+    describe 'AuthorizationCode flow' do
       before { subject.call }
 
+      context 'when valid params' do
+        it { expect(AccessToken.count).to eq 1 }
+        it { expect(last_response.status).to eq 200 }
+        it { expect(json_body[:access_token]).not_to be_nil }
+        it { expect(json_body[:token_type]).to eq 'bearer' }
+        it { expect(json_body[:expires_in]).to eq 7200 }
+      end
+
       context 'when invalid params' do
-        context 'without username' do
-          let(:username) {}
+        context 'without code' do
+          let(:code) {}
 
           it { expect(AccessToken.count).to be_zero }
           it { expect(json_body[:error]).to eq('invalid_request') }
-          it { expect(json_body[:error_description]).to eq("'username' required.") }
+          it { expect(json_body[:error_description]).to eq("'code' required.") }
           it { expect(last_response.status).to eq 400 }
         end
 
-        context 'with invalid username' do
-          let(:username) { 'invalid@example.com' }
+        context 'with invalid code' do
+          let(:code) { 'invalid' }
           let(:error_description) do
-            'The provided access grant is invalid, expired, or revoked (e.g. invalid assertion, '\
-            'expired authorization token, bad end-user password credentials, '\
-            'or mismatching authorization code and redirection URI).'
+            'The provided access grant is invalid, expired, or revoked '\
+            '(e.g. invalid assertion, expired authorization token, '\
+            'bad end-user password credentials, or mismatching authorization code and redirection URI).'
           end
 
           it { expect(AccessToken.count).to be_zero }
@@ -51,21 +57,26 @@ describe 'Token Endpoint' do
           it { expect(last_response.status).to eq 400 }
         end
 
-        context 'without password' do
-          let(:password) {}
+        context 'without redirect_uri' do
+          let(:redirect_uri) {}
+          let(:error_description) do
+            'The provided access grant is invalid, expired, or revoked '\
+            '(e.g. invalid assertion, expired authorization token, '\
+            'bad end-user password credentials, or mismatching authorization code and redirection URI).'
+          end
 
           it { expect(AccessToken.count).to be_zero }
-          it { expect(json_body[:error]).to eq('invalid_request') }
-          it { expect(json_body[:error_description]).to eq("'password' required.") }
+          it { expect(json_body[:error]).to eq('invalid_grant') }
+          it { expect(json_body[:error_description]).to eq(error_description) }
           it { expect(last_response.status).to eq 400 }
         end
 
-        context 'with invalid password' do
-          let(:password) { 'invalid@password.com' }
+        context 'with invalid redirect_uri' do
+          let(:redirect_uri) { 'invalid' }
           let(:error_description) do
-            'The provided access grant is invalid, expired, or revoked (e.g. invalid assertion, '\
-            'expired authorization token, bad end-user password credentials, '\
-            'or mismatching authorization code and redirection URI).'
+            'The provided access grant is invalid, expired, or revoked '\
+            '(e.g. invalid assertion, expired authorization token, '\
+            'bad end-user password credentials, or mismatching authorization code and redirection URI).'
           end
 
           it { expect(AccessToken.count).to be_zero }
@@ -146,36 +157,6 @@ describe 'Token Endpoint' do
           it { expect(json_body[:error]).to eq('unsupported_grant_type') }
           it { expect(json_body[:error_description]).to eq(error_description) }
           it { expect(last_response.status).to eq 400 }
-        end
-      end
-
-      context 'when valid params' do
-        context 'return AccessToken' do
-          it { expect(AccessToken.count).to eq 1 }
-          it { expect(AccessToken.first.client_id).to eq(client.id) }
-          it { expect(AccessToken.first.resource_owner_id).to eq(user.id) }
-
-          it { expect(last_response.status).to eq 200 }
-          it { expect(json_body[:access_token]).to be_present }
-          it { expect(json_body[:token_type]).to eq 'bearer' }
-          it { expect(json_body[:expires_in]).to eq 7200 }
-          it { expect(json_body[:refresh_token]).to be_nil }
-          it { expect(json_body[:scope]).to eq('read,write') }
-        end
-
-        context 'return AccessToken without scopes' do
-          let(:scopes) {}
-
-          it { expect(AccessToken.count).to eq 1 }
-          it { expect(AccessToken.first.client_id).to eq(client.id) }
-          it { expect(AccessToken.first.resource_owner_id).to eq(user.id) }
-
-          it { expect(last_response.status).to eq 200 }
-          it { expect(json_body[:access_token]).to be_present }
-          it { expect(json_body[:token_type]).to eq 'bearer' }
-          it { expect(json_body[:expires_in]).to eq 7200 }
-          it { expect(json_body[:refresh_token]).to be_nil }
-          it { expect(json_body[:scope]).to be_nil }
         end
       end
     end

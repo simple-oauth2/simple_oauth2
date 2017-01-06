@@ -1,13 +1,13 @@
 module Simple
   module OAuth2
     module Resource
-      # Middleware for injecting realm and authenticator into Rack OAuth2
+      # OAuth2 middleware Protected Resource Endpoint
       class Bearer
         def initialize(app)
           @app = app
         end
 
-        # see https://github.com/nov/rack-oauth2/blob/master/lib/rack/oauth2/server/resource.rb
+        # See https://github.com/nov/rack-oauth2/wiki/Server-Resource-Endpoint
         def call(env)
           app = Rack::OAuth2::Server::Resource::Bearer.new(@app, Simple::OAuth2.config.realm) do |req|
             Simple::OAuth2.config.token_authenticator.call(req)

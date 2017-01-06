@@ -4,7 +4,10 @@ describe 'GET Protected Resources' do
   subject { -> { get url, params } }
 
   let(:url) { '/api/v1/status' }
-  let(:access_token) { AccessToken.create(attributes_for(:access_token)) }
+  let(:client) { Client.create(attributes_for(:client)) }
+  let(:user) { User.create(attributes_for(:user)) }
+  let(:scopes) { nil }
+  let(:access_token) { AccessToken.create_for(client, user, scopes) }
   let(:params) { { access_token: access_token.token } }
 
   before { subject.call }
@@ -26,8 +29,8 @@ describe 'GET Protected Resources' do
     end
 
     context "returns Unauthorized when token scopes doesn't match required scopes" do
-      let(:access_token) { AccessToken.create(attributes_for(:access_token_with_read_scopes)) }
       let(:url) { '/api/v1/status/multiple_scopes' }
+      let(:scopes) { 'read' }
 
       it { expect(last_response.status).to eq 403 }
       it { expect(json_body[:error]).to eq 'forbidden' }
@@ -42,8 +45,8 @@ describe 'GET Protected Resources' do
     end
 
     context 'returns status for endpoint with specific scope' do
-      let(:access_token) { AccessToken.create(attributes_for(:access_token_with_read_scopes)) }
       let(:url) { '/api/v1/status/single_scope' }
+      let(:scopes) { 'read' }
 
       it { expect(last_response.status).to eq 200 }
       it { expect(json_body[:value]).to eq('Access read') }
@@ -51,8 +54,8 @@ describe 'GET Protected Resources' do
     end
 
     context 'returns status for endpoint with specific set of scopes' do
-      let(:access_token) { AccessToken.create(attributes_for(:access_token_with_read_and_write_scopes)) }
       let(:url) { '/api/v1/status/multiple_scopes' }
+      let(:scopes) { 'read,write' }
 
       it { expect(last_response.status).to eq 200 }
       it { expect(json_body[:value]).to eq('Access read, write') }

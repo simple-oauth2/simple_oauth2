@@ -5,16 +5,19 @@ describe 'Token Endpoint' do
 
   let(:url) { '/oauth/token' }
   let(:client) { Client.create(attributes_for(:client)) }
-  let(:access_grant) { AccessGrant.create(attributes_for(:access_grant)) }
-  let(:redirect_uri) { access_grant.redirect_uri }
+  let(:user) { User.create(attributes_for(:user)) }
   let(:grant_type) { 'authorization_code' }
   let(:client_id) { client.key }
   let(:client_secret) { client.secret }
+  let(:scopes) { nil }
+  let(:redirect_uri) { 'localhost:3000/home' }
+  let(:another_redirect_uri) { redirect_uri }
+  let(:access_grant) { AccessGrant.create_for(client, user, redirect_uri, scopes) }
   let(:code) { access_grant.token }
   let(:params) do
     {
       code: code,
-      redirect_uri: redirect_uri,
+      redirect_uri: another_redirect_uri,
       client_id: client_id,
       client_secret: client_secret,
       grant_type: grant_type
@@ -72,7 +75,8 @@ describe 'Token Endpoint' do
         end
 
         context 'with invalid redirect_uri' do
-          let(:redirect_uri) { 'invalid' }
+          let(:another_redirect_uri) { 'invalid' }
+
           let(:error_description) do
             'The provided access grant is invalid, expired, or revoked '\
             '(e.g. invalid assertion, expired authorization token, '\

@@ -16,6 +16,11 @@ module Simple
             config.resource_owner_class.oauth_authenticate(client, request.username, request.password)
           end
 
+          # Authenticates Access Grant from the request
+          def authenticate_access_grant(request)
+            config.access_grant_class.authenticate(request.code)
+          end
+
           # Exposes token object to Bearer token.
           #
           # @param token [#to_bearer_token] any object that responds to `to_bearer_token`
@@ -23,6 +28,13 @@ module Simple
           #
           def expose_to_bearer_token(token)
             Rack::OAuth2::AccessToken::Bearer.new(token.to_bearer_token)
+          end
+
+          # Check client for exact matching verifier
+          def verify_client!(request)
+            client = authenticate_client(request) || request.invalid_client!
+            client.secret == request.client_secret || request.invalid_client!
+            client
           end
 
           private

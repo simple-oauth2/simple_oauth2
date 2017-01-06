@@ -6,7 +6,7 @@ module Simple
       include ClassAccessors
 
       # Currently supported (by the gem) OAuth2 grant types
-      SUPPORTED_GRANT_TYPES = %w(password).freeze
+      SUPPORTED_GRANT_TYPES = %w(password authorization_code).freeze
 
       # Default Access Token TTL (in seconds)
       DEFAULT_TOKEN_LIFETIME = 7200

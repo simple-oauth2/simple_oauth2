@@ -10,9 +10,9 @@ module Simple
           include ::NoBrainer::Document::Timestamps
 
           belongs_to :client, class_name: Simple::OAuth2.config.client_class_name,
-                              foreign_key: :client_id
+                              foreign_key: :client_id, primary_key: :id
           belongs_to :resource_owner, class_name: Simple::OAuth2.config.resource_owner_class_name,
-                                      foreign_key: :resource_owner_id
+                                      foreign_key: :resource_owner_id, primary_key: :id
 
           before_save { self.updated_at = Time.now }
           before_validation :setup_expiration, if: :new_record?
@@ -46,12 +46,12 @@ module Simple
             def authenticate(token)
               where(token: token.to_s).first
             end
+          end
 
-            private
+          private
 
-            def setup_expiration
-              self.expires_at = Time.now.utc + Simple::OAuth2.config.authorization_code_lifetime if expires_at.nil?
-            end
+          def setup_expiration
+            self.expires_at = Time.now.utc + Simple::OAuth2.config.authorization_code_lifetime if expires_at.nil?
           end
         end
       end

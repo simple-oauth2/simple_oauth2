@@ -12,6 +12,14 @@ module Simple
             config.allowed_grant_types
           end
 
+          # Allowed response types from the Simple::OAuth2 configuration
+          #
+          # @return [Array] allowed response types
+          #
+          def allowed_types
+            config.allowed_response_types
+          end
+
           # Short getter for Simple::OAuth2 configuration.
           def config
             Simple::OAuth2.config

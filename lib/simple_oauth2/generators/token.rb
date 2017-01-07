@@ -39,7 +39,7 @@ module Simple
           #
           # @param grant_type [Symbol] grant type value
           #
-          # @return [Password] strategy class
+          # @return [Password, RefreshToken, AuthorizationCode] strategy class
           #
           def find_strategy(grant_type)
             "Simple::OAuth2::Strategies::#{grant_type.to_s.classify}".constantize

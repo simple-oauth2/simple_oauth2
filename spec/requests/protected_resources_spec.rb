@@ -4,8 +4,8 @@ describe 'GET Protected Resources' do
   subject { -> { get url, params } }
 
   let(:url) { '/api/v1/status' }
-  let(:client) { Client.create(attributes_for(:client)) }
-  let(:user) { User.create(attributes_for(:user)) }
+  let(:client) { Client.create(name: FFaker::Internet.domain_word, redirect_uri: 'http://localhost:3000/home') }
+  let(:user) { User.create(username: FFaker::Internet.user_name, encrypted_password: FFaker::Internet.password) }
   let(:scopes) { nil }
   let(:access_token) { AccessToken.create_for(client, user, scopes) }
   let(:params) { { access_token: access_token.token } }

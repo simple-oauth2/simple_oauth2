@@ -5,7 +5,6 @@ require 'bundler/setup'
 Bundler.setup
 
 require 'rack/test'
-require 'factory_girl'
 require 'ffaker'
 require 'coveralls'
 
@@ -25,11 +24,9 @@ require ORM_GEMS_MAPPING[ENV['ORM']]
 require File.expand_path("../dummy/orm/#{ENV['ORM']}/app/twitter", __FILE__)
 APP = Rack::Builder.parse_file(File.expand_path("../dummy/orm/#{ENV['ORM']}/config.ru", __FILE__)).first
 
-require "support/config/#{ORM_GEMS_MAPPING[ENV['ORM']]}"
 require 'support/helper'
 
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
   config.include Helper
 
   config.filter_run_excluding skip_if: true
@@ -38,20 +35,11 @@ RSpec.configure do |config|
   config.color = true
 
   config.before(:all) do
-    if ENV['ORM'] == 'nobrainer'
-      NoBrainer.configure(&NOBRAINER_CONF)
-      NoBrainer.sync_schema
-    end
-  end
-
-  config.before(:suite) do
-    FactoryGirl.find_definitions
+    NoBrainer.sync_schema
   end
 
   config.before(:each) do
-    if ENV['ORM'] == 'nobrainer'
-      NoBrainer.purge!
-      NoBrainer::Loader.cleanup
-    end
+    NoBrainer.purge!
+    NoBrainer::Loader.cleanup
   end
 end

@@ -8,6 +8,9 @@ module Simple
       # Currently supported (by the gem) OAuth2 grant types
       SUPPORTED_GRANT_TYPES = %w(password authorization_code refresh_token).freeze
 
+      # Default OAuth2 response types
+      SUPPORTED_RESPONSE_TYPES = %w(code token).freeze
+
       # Default Access Token TTL (in seconds)
       DEFAULT_TOKEN_LIFETIME = 7200
 
@@ -62,6 +65,12 @@ module Simple
       # @return [Array<String>] grant types
       #
       attr_accessor :allowed_grant_types
+
+      # OAuth2 response types (flows) allowed to be processed
+      #
+      # @return [Array<String>] response types
+      #
+      attr_accessor :allowed_response_types
 
       # Realm value
       #
@@ -127,6 +136,7 @@ module Simple
         self.access_token_lifetime = DEFAULT_TOKEN_LIFETIME
         self.authorization_code_lifetime = DEFAULT_CODE_LIFETIME
         self.allowed_grant_types = SUPPORTED_GRANT_TYPES
+        self.allowed_response_types = SUPPORTED_RESPONSE_TYPES
         self.issue_refresh_token = DEFAULT_ISSUE_REFRESH_TOKEN
         self.on_refresh = :nothing
 

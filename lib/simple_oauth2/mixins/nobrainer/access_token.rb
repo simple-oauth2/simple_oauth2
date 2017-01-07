@@ -45,7 +45,7 @@ module Simple
 
           class << self
             def create_for(client, resource_owner, scopes = nil)
-              create(client_id: client.id, resource_owner_id: resource_owner.id, scopes: scopes.to_s)
+              create(client_id: client.id, resource_owner_id: resource_owner.id, scopes: scopes)
             end
 
             def authenticate(token, type = nil)

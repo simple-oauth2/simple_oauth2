@@ -4,8 +4,8 @@ describe 'Token Endpoint' do
   subject { -> { post url, params } }
 
   let(:url) { '/oauth/token' }
-  let(:client) { Client.create(attributes_for(:client)) }
-  let(:user) { User.create(attributes_for(:user)) }
+  let(:client) { Client.create(name: FFaker::Internet.domain_word, redirect_uri: 'http://localhost:3000/home') }
+  let(:user) { User.create(username: FFaker::Internet.user_name, encrypted_password: FFaker::Internet.password) }
   let(:client_id) { client.key }
   let(:client_secret) { client.secret }
   let(:grant_type) { 'refresh_token' }

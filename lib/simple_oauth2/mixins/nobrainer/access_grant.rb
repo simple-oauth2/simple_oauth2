@@ -37,9 +37,9 @@ module Simple
             def create_for(client, resource_owner, redirect_uri, scopes = nil)
               create(
                 client_id: client.id,
-                resource_owner_id: resource_owner.id,
+                resource_owner_id: resource_owner && resource_owner.id,
                 redirect_uri: redirect_uri,
-                scopes: scopes.to_s
+                scopes: scopes
               )
             end
 

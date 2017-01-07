@@ -8,6 +8,10 @@ map '/oauth/token' do
   run Twitter::Token
 end
 
+map '/oauth/authorization' do
+  run Twitter::Authorization
+end
+
 map '/api/v1/status' do
   run Twitter::Status
 end

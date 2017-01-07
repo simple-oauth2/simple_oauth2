@@ -18,10 +18,12 @@ require 'simple_oauth2/strategies/base'
 require 'simple_oauth2/strategies/password'
 require 'simple_oauth2/strategies/authorization_code'
 require 'simple_oauth2/strategies/refresh_token'
+require 'simple_oauth2/strategies/code'
 
 # Generators
 require 'simple_oauth2/generators/base'
 require 'simple_oauth2/generators/token'
+require 'simple_oauth2/generators/authorization'
 
 # Helpers
 require 'simple_oauth2/helpers'

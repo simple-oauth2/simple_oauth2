@@ -7,7 +7,7 @@ module Simple
         class << self
           # Processes Refresh Token request
           def process(request)
-            client = verify_client!(request)
+            client = token_verify_client!(request)
             refresh_token = verify_refresh_token!(request, client.id)
 
             token = config.access_token_class.create_for(

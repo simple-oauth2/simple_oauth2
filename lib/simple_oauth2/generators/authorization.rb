@@ -44,13 +44,15 @@ module Simple
           #
           def execute_default(request, response)
             find_strategy(request.response_type).process(request, response)
+            response.approve!
+            response
           end
 
           # Returns Simple::OAuth2 strategy class by Response Type
           #
           # @param response_type [Symbol] response type value
           #
-          # @return [Code] strategy class
+          # @return [Code, Token] strategy class
           #
           def find_strategy(response_type)
             "Simple::OAuth2::Strategies::#{response_type.to_s.classify}".constantize

@@ -125,6 +125,14 @@ module Simple
         end
       end
 
+      # Default Access Token authenticator block.
+      # Validates token value passed with the request params
+      def default_token_authenticator
+        lambda do |request|
+          access_token_class.authenticate(request.access_token) || request.invalid_token!
+        end
+      end
+
       private
 
       # Setup configuration to default options values
@@ -160,14 +168,6 @@ module Simple
         self.resource_owner_class_name = DEFAULT_RESOURCE_OWNER_CLASS
         self.client_class_name = DEFAULT_CLIENT_CLASS
         self.access_grant_class_name = DEFAULT_ACCESS_GRANT_CLASS
-      end
-
-      # Default Access Token authenticator block.
-      # Validates token value passed with the request params
-      def default_token_authenticator
-        lambda do |request|
-          access_token_class.authenticate(request.access_token) || request.invalid_token!
-        end
       end
     end
   end

@@ -30,10 +30,17 @@ module Simple
             Rack::OAuth2::AccessToken::Bearer.new(token.to_bearer_token)
           end
 
-          # Check client for exact matching verifier
-          def verify_client!(request)
+          # Token endpoint, check client for exact matching verifier
+          def token_verify_client!(request)
             client = authenticate_client(request) || request.invalid_client!
             client.secret == request.client_secret || request.invalid_client!
+            client
+          end
+
+          # Authorization endpoint, check client and redirect_uri for exact matching verifier
+          def authorization_verify_client!(request, response)
+            client = authenticate_client(request) || request.bad_request!
+            response.redirect_uri = request.verify_redirect_uri!(client.redirect_uri)
             client
           end
 

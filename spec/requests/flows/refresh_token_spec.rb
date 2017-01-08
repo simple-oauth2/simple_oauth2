@@ -133,26 +133,35 @@ describe 'Token Endpoint' do
         end
 
         context 'does nothing on token refresh if :on_refresh is equal to' do
-          context ':nothing' do
-            before do
-              allow(Simple::OAuth2.config).to receive(:issue_refresh_token).and_return(true)
-              allow(Simple::OAuth2.config).to receive(:on_refresh).and_return(:nothing)
-              subject.call
-            end
+          let(:callback) { nil }
+
+          before do
+            allow(Simple::OAuth2.config).to receive(:issue_refresh_token).and_return(true)
+            allow(Simple::OAuth2.config).to receive(:on_refresh).and_return(callback)
+          end
+
+          context 'nil' do
+            before { subject.call }
 
             it { expect(Simple::OAuth2::Strategies::RefreshToken).not_to receive(:run_callback_on_refresh_token) }
             it { expect(last_response.status).to eq 200 }
           end
 
-          context 'nil' do
-            before do
-              allow(Simple::OAuth2.config).to receive(:issue_refresh_token).and_return(true)
-              allow(Simple::OAuth2.config).to receive(:on_refresh).and_return(nil)
-              subject.call
-            end
+          context ':nothing' do
+            let(:callback) { :nothing }
+            before { subject.call }
 
             it { expect(Simple::OAuth2::Strategies::RefreshToken).not_to receive(:run_callback_on_refresh_token) }
             it { expect(last_response.status).to eq 200 }
+          end
+
+          context 'String' do
+            let(:callback) { 'SomeClass' }
+            let(:error) do
+              ":on_refresh is not a block and Access Token class doesn't respond to #{callback}!"
+            end
+
+            it { expect { subject.call }.to raise_error(ArgumentError, error) }
           end
         end
       end

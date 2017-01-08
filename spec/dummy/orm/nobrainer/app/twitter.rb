@@ -6,7 +6,9 @@ require_relative 'models/client'
 require_relative 'models/user'
 
 require_relative '../../../endpoints/authorization'
+require_relative '../../../endpoints/custom_authorization'
 require_relative '../../../endpoints/token'
+require_relative '../../../endpoints/custom_token'
 require_relative '../../../endpoints/status'
 
 load File.expand_path('../config/db.rb', __FILE__)
@@ -19,8 +21,16 @@ module Twitter
     extend Twitter::Endpoints::Token
   end
 
+  class CustomToken
+    extend Twitter::Endpoints::CustomToken
+  end
+
   class Authorization
     extend Twitter::Endpoints::Authorization
+  end
+
+  class CustomAuthorization
+    extend Twitter::Endpoints::CustomAuthorization
   end
 
   class Status

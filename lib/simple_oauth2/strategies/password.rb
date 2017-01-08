@@ -7,7 +7,7 @@ module Simple
         class << self
           # Processes Password request
           def process(request)
-            client = verify_client!(request)
+            client = token_verify_client!(request)
 
             resource_owner = authenticate_resource_owner(client, request) || request.invalid_grant!
 

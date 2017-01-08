@@ -12,6 +12,14 @@ map '/oauth/authorization' do
   run Twitter::Authorization
 end
 
+map '/oauth/custom_token' do
+  run Twitter::CustomToken
+end
+
+map '/oauth/custom_authorization' do
+  run Twitter::CustomAuthorization
+end
+
 map '/api/v1/status' do
   run Twitter::Status
 end

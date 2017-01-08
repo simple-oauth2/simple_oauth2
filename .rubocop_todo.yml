@@ -8,3 +8,5 @@ Metrics/LineLength:
   Max: 120
 Style/Lambda:
   Enabled: false
+Style/DotPosition:
+  Enabled: false

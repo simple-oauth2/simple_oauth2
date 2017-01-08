@@ -24,6 +24,15 @@ describe 'Token Endpoint' do
     }
   end
 
+  describe 'POST /oauth/custom_token' do
+    let(:url) { '/oauth/custom_token' }
+    before { subject.call }
+
+    context 'invokes custom block' do
+      it { expect(last_response.status).to eq(400) }
+    end
+  end
+
   describe 'POST /oauth/token' do
     describe 'AuthorizationCode flow' do
       before { subject.call }

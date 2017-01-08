@@ -24,12 +24,12 @@ module Simple
 
       # Returns Token Generator class by configured name
       def token_generator
-        @token_generator ||= token_generator_class_name.constantize
+        token_generator_class_name.constantize
       end
 
       # Returns Scopes Validator class by configured name
       def scopes_validator
-        @scopes_validator ||= scopes_validator_class_name.constantize
+        scopes_validator_class_name.constantize
       end
     end
   end

@@ -7,16 +7,13 @@ module Simple
         class << self
           # Processes Code request
           def process(request, response)
-            client = authenticate_client(request) || request.bad_request!
-            response.redirect_uri = request.verify_redirect_uri!(client.redirect_uri)
+            client = authorization_verify_client!(request, response)
 
             authorization_code = config.access_grant_class.create_for(
               client, nil, response.redirect_uri, request.scope.join(',')
             )
 
             response.code = authorization_code.token
-            response.approve!
-            response
           end
         end
       end

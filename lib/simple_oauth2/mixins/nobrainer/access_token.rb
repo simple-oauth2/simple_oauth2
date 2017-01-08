@@ -17,7 +17,7 @@ module Simple
           belongs_to :resource_owner, class_name: Simple::OAuth2.config.resource_owner_class_name,
                                       foreign_key: :resource_owner_id, primary_key: :id
 
-          field :resource_owner_id, type: String, required: true, index: true
+          field :resource_owner_id, type: String, index: true
           field :client_id, type: String, required: true, index: true
           field :token,
                 type: String,
@@ -45,7 +45,11 @@ module Simple
 
           class << self
             def create_for(client, resource_owner, scopes = nil)
-              create(client_id: client.id, resource_owner_id: resource_owner.id, scopes: scopes)
+              create(
+                client_id: client.id,
+                resource_owner_id: resource_owner && resource_owner.id,
+                scopes: scopes
+              )
             end
 
             def authenticate(token, type = nil)

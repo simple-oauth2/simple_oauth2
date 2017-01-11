@@ -119,6 +119,14 @@ module Simple
         end
       end
 
+      # Default Access Token authenticator block.
+      # Validates token value passed with the request params
+      def default_token_authenticator
+        lambda do |request|
+          access_token_class.authenticate(request.access_token) || request.invalid_token!
+        end
+      end
+
       private
 
       # Setup configuration to default options values
@@ -137,14 +145,6 @@ module Simple
         self.server_abstract_request = default_server_abstract_request
 
         self.realm = DEFAULT_REALM
-      end
-
-      # Default Access Token authenticator block.
-      # Validates token value passed with the request params
-      def default_token_authenticator
-        lambda do |request|
-          access_token_class.authenticate(request.access_token) || request.invalid_token!
-        end
       end
 
       # Default Resource Owner authenticator block

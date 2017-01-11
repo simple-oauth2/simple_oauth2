@@ -130,7 +130,7 @@ describe Simple::OAuth2::Configuration do
 
       after do
         Simple::OAuth2.configure do |c|
-          c.token_authenticator = AccessToken.authenticate(request.token)
+          c.token_authenticator = config.default_token_authenticator
         end
       end
 

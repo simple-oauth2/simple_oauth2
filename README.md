@@ -1,4 +1,5 @@
-# Simple::OAuth2
+![Simple OAuth2 Logo](https://raw.github.com/0bman/simple_oauth2/master/logo.png)
+
 [![Build Status](https://travis-ci.org/0bman/simple_oauth2.svg?branch=master)](https://travis-ci.org/0bman/simple_oauth2)
 [![Dependency Status](https://gemnasium.com/badges/github.com/0bman/simple_oauth2.svg)](https://gemnasium.com/github.com/0bman/simple_oauth2)
 [![CoverageStatus](https://coveralls.io/repos/github/0bman/simple_oauth2/badge.svg?branch=master)](https://coveralls.io/github/0bman/simple_oauth2?branch=master)

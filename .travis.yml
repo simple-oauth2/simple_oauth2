@@ -1,6 +1,8 @@
 language: ruby
 cache: bundler
 bundler_args: --without yard guard benchmarks
+notifications:
+  email: false
 addons:
   code_climate:
     repo_token: b06efdea32dd6768ddb83b21e07f85d439a6c725eaa97c8981324a14cbcbee17

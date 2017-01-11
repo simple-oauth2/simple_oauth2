@@ -43,7 +43,7 @@ module Simple
             elsif access_token.respond_to?(callback)
               access_token.send(callback)
             else
-              raise ArgumentError, ":on_refresh is not a block and Access Token class doesn't respond to #{callback}!"
+              raise(ArgumentError, I18n.t('simple_oauth2.errors.messages.on_refresh', callback: callback))
             end
           end
         end

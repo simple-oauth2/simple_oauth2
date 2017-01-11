@@ -41,6 +41,8 @@ RSpec.configure do |config|
   config.color = true
 
   config.before(:all) do
+    I18n.load_path += Dir['./config/locales/*.yml']
+    I18n.reload!
     NoBrainer.sync_schema
   end
 

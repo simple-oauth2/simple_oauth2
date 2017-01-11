@@ -1,0 +1,7 @@
+en:
+  simple_oauth2:
+    errors:
+      messages:
+        resource_owner_authenticator_not_configured: Resource Owner find failed due to Simple::OAuth2.configure.resource_owner_authenticator being unconfigured.
+        server_abstract_request_not_configured: Abstract request find failed due to Simple::OAuth2.configure.server_abstract_request being unconfigured.
+        on_refresh: ":on_refresh is not a block and Access Token class doesn't respond to %{callback}!"

@@ -46,6 +46,9 @@ describe Simple::OAuth2::Configuration do
     it { expect(config.on_refresh).to eq(:nothing) }
 
     it { expect(config.scopes_validator_class_name).to eq(Simple::OAuth2::Scopes.name) }
+
+    it { expect { config.resource_owner_authenticator.call('test') }.to raise_error(RuntimeError) }
+    it { expect { config.server_abstract_request.call }.to raise_error(RuntimeError) }
   end
 
   context 'custom config' do
@@ -115,6 +118,8 @@ describe Simple::OAuth2::Configuration do
     end
 
     context 'works with custom token authenticator' do
+      let(:request) { AccessToken.create }
+
       before do
         Simple::OAuth2.configure do |c|
           c.token_authenticator do
@@ -125,7 +130,7 @@ describe Simple::OAuth2::Configuration do
 
       after do
         Simple::OAuth2.configure do |c|
-          c.token_authenticator = config.default_token_authenticator
+          c.token_authenticator = AccessToken.authenticate(request.token)
         end
       end
 

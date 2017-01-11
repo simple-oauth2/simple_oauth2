@@ -4,6 +4,7 @@ describe 'Authorization Endpoint' do
   subject { -> { post url, params } }
 
   let(:url) { '/oauth/authorization' }
+  let!(:user) { User.create(username: FFaker::Internet.user_name, encrypted_password: FFaker::Internet.password) }
   let(:client) { Client.create(name: FFaker::Internet.domain_word, redirect_uri: 'http://localhost:3000/home') }
   let(:client_id) { client.key }
   let(:redirect_uri) { client.redirect_uri }
@@ -29,6 +30,7 @@ describe 'Authorization Endpoint' do
 
         it { expect(AccessGrant.count).to eq 1 }
         it { expect(AccessGrant.last.scopes).to be_empty }
+        it { expect(AccessGrant.last.resource_owner.username).to eq user.username }
         it { expect(last_response.status).to eq 302 }
         it { expect(last_response.headers['Location']).to eq response_header }
 

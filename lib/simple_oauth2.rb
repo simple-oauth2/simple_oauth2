@@ -1,6 +1,7 @@
 require 'rack/oauth2'
 
 require 'simple_oauth2/configuration/class_accessors'
+require 'simple_oauth2/configuration/constants'
 require 'simple_oauth2/configuration'
 require 'simple_oauth2/scopes'
 require 'simple_oauth2/uniq_token'

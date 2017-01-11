@@ -10,7 +10,10 @@ module Simple
             client = authorization_verify_client!(request, response)
 
             authorization_code = config.access_grant_class.create_for(
-              client, nil, response.redirect_uri, request.scope.join(',')
+              client,
+              config.resource_owner_authenticator.call(request),
+              response.redirect_uri,
+              request.scope.join(',')
             )
 
             response.code = authorization_code.token

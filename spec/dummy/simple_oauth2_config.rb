@@ -1,8 +1,11 @@
 Simple::OAuth2.configure do |config|
-  config.client_class_name = 'Client'
-  config.access_token_class_name = 'AccessToken'
-  config.resource_owner_class_name = 'User'
-  config.access_grant_class_name = 'AccessGrant'
+  config.resource_owner_authenticator do |_request|
+    User.first
+  end
+
+  config.server_abstract_request do
+    request
+  end
 
   config.realm = 'Custom Realm'
 end

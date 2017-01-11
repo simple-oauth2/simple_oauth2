@@ -9,7 +9,11 @@ module Simple
           def process(request, response)
             client = authorization_verify_client!(request, response)
 
-            access_token = config.access_token_class.create_for(client, nil, request.scope.join(','))
+            access_token = config.access_token_class.create_for(
+              client,
+              config.resource_owner_authenticator.call(request),
+              request.scope.join(',')
+            )
 
             response.access_token = expose_to_bearer_token(access_token)
           end

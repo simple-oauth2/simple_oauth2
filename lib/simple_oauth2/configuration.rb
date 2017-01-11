@@ -1,39 +1,10 @@
 module Simple
   module OAuth2
-    # Simple::OAuth2 configuration class
+    # Simple::OAuth2 configuration class.
     # Contains default or customized options that would be used in OAuth2 endpoints and helpers
     class Configuration
       include ClassAccessors
-
-      # Currently supported (by the gem) OAuth2 grant types
-      SUPPORTED_GRANT_TYPES = %w(password authorization_code refresh_token).freeze
-
-      # Default OAuth2 response types
-      SUPPORTED_RESPONSE_TYPES = %w(code token).freeze
-
-      # Default Access Token TTL (in seconds)
-      DEFAULT_TOKEN_LIFETIME = 7200
-
-      # Default Authorization Code TTL (in seconds)
-      DEFAULT_CODE_LIFETIME = 1800
-
-      # Default realm value
-      DEFAULT_REALM = 'OAuth 2.0'.freeze
-
-      # Default Client class value
-      DEFAULT_CLIENT_CLASS = 'Client'.freeze
-
-      # Default Access Token class value
-      DEFAULT_ACCESS_TOKEN_CLASS = 'AccessToken'.freeze
-
-      # Default Resource Owner class value
-      DEFAULT_RESOURCE_OWNER_CLASS = 'User'.freeze
-
-      # Default Access Grant class value
-      DEFAULT_ACCESS_GRANT_CLASS = 'AccessGrant'.freeze
-
-      # Default option for generate refresh token
-      DEFAULT_ISSUE_REFRESH_TOKEN = false
+      include Constants
 
       # The names of the classes that represents OAuth2 roles
       #
@@ -81,6 +52,9 @@ module Simple
       # Access Token authenticator block option for customization
       attr_accessor :token_authenticator
 
+      # Resource Owner authenticator block option for customization
+      attr_accessor :resource_owner_authenticator
+
       # Specifies whether to generate a Refresh Token when creating an Access Token
       #
       # @return [Boolean] true if need to generate refresh token
@@ -90,6 +64,8 @@ module Simple
       # Callback that would be invoked during processing of Refresh Token request for
       # the original Access Token found by token value
       attr_accessor :on_refresh
+
+      attr_accessor :server_abstract_request
 
       # Return a new instance of Configuration with default options
       def initialize
@@ -103,6 +79,16 @@ module Simple
           instance_variable_set(:'@token_authenticator', block)
         else
           instance_variable_get(:'@token_authenticator')
+        end
+      end
+
+      # Accessor for Resource Owner authenticator block. Set it to proc
+      # if called with block or returns current value of the accessor.
+      def resource_owner_authenticator(&block)
+        if block_given?
+          instance_variable_set(:'@resource_owner_authenticator', block)
+        else
+          instance_variable_get(:'@resource_owner_authenticator')
         end
       end
 
@@ -125,11 +111,11 @@ module Simple
         end
       end
 
-      # Default Access Token authenticator block.
-      # Validates token value passed with the request params
-      def default_token_authenticator
-        lambda do |request|
-          access_token_class.authenticate(request.access_token) || request.invalid_token!
+      def server_abstract_request(&block)
+        if block_given?
+          instance_variable_set(:'@server_abstract_request', block)
+        else
+          instance_variable_get(:'@server_abstract_request')
         end
       end
 
@@ -148,7 +134,31 @@ module Simple
         self.issue_refresh_token = DEFAULT_ISSUE_REFRESH_TOKEN
         self.on_refresh = :nothing
 
+        self.server_abstract_request = default_server_abstract_request
+
         self.realm = DEFAULT_REALM
+      end
+
+      # Default Access Token authenticator block.
+      # Validates token value passed with the request params
+      def default_token_authenticator
+        lambda do |request|
+          access_token_class.authenticate(request.access_token) || request.invalid_token!
+        end
+      end
+
+      # Default Resource Owner authenticator block
+      def default_resource_owner_authenticator
+        lambda do |_request|
+          raise(I18n.t('simple_oauth2.errors.messages.resource_owner_authenticator_not_configured'))
+        end
+      end
+
+      # Default abstract request
+      def default_server_abstract_request
+        lambda do
+          raise(I18n.t('simple_oauth2.errors.messages.server_abstract_request_not_configured'))
+        end
       end
 
       # Sets OAuth2 helpers classes to gem defaults
@@ -157,9 +167,10 @@ module Simple
         self.scopes_validator_class_name = Simple::OAuth2::Scopes.name
       end
 
-      # Sets authenticators to gem defaults.
+      # Sets authenticators to gem defaults
       def init_authenticators
         self.token_authenticator = default_token_authenticator
+        self.resource_owner_authenticator = default_resource_owner_authenticator
       end
 
       # Sets OAuth2 represents roles

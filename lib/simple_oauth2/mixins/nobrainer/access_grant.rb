@@ -17,7 +17,7 @@ module Simple
           before_save { self.updated_at = Time.now }
           before_validation :setup_expiration, if: :new_record?
 
-          field :resource_owner_id, type: String, index: true
+          field :resource_owner_id, type: String, index: true, required: true
           field :client_id, type: String, required: true, index: true
           field :token,
                 type: String,
@@ -37,7 +37,7 @@ module Simple
             def create_for(client, resource_owner, redirect_uri, scopes = nil)
               create(
                 client_id: client.id,
-                resource_owner_id: resource_owner && resource_owner.id,
+                resource_owner_id: resource_owner.id,
                 redirect_uri: redirect_uri,
                 scopes: scopes
               )

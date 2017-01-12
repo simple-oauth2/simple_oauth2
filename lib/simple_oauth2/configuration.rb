@@ -150,14 +150,20 @@ module Simple
       # Default Resource Owner authenticator block
       def default_resource_owner_authenticator
         lambda do |_request|
-          raise(I18n.t('simple_oauth2.errors.messages.resource_owner_authenticator_not_configured'))
+          raise(
+            'Resource Owner find failed due to '\
+            'Simple::OAuth2.configure.resource_owner_authenticator being unconfigured.'
+          )
         end
       end
 
       # Default abstract request
       def default_server_abstract_request
         lambda do
-          raise(I18n.t('simple_oauth2.errors.messages.server_abstract_request_not_configured'))
+          raise(
+            'Abstract request find failed due to '\
+            'Simple::OAuth2.configure.server_abstract_request being unconfigured.'
+          )
         end
       end
 

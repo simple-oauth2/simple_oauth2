@@ -8,6 +8,10 @@ map '/oauth/token' do
   run Twitter::Token
 end
 
+map '/oauth/revoke_token' do
+  run Twitter::RevokeToken
+end
+
 map '/oauth/authorization' do
   run Twitter::Authorization
 end

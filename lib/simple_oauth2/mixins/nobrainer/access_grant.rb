@@ -18,18 +18,20 @@ module Simple
           before_validation :setup_expiration, if: :new_record?
 
           field :resource_owner_id, type: String, index: true, required: true
-          field :client_id, type: String, required: true, index: true
+          field :client_id,         type: String, index: true, required: true
+
           field :token,
                 type: String,
                 required: true,
                 uniq: true,
                 index: true,
                 default: -> { Simple::OAuth2.config.token_generator.generate }
-          field :redirect_uri, type: String, required: true
-          field :scopes, type: String
 
-          field :expires_at, type: Time, required: true
+          field :redirect_uri, type: String, required: true
+          field :scopes,       type: String
+
           field :revoked_at, type: Time
+          field :expires_at, type: Time, required: true
           field :created_at, type: Time, required: true, default: -> { Time.now }
           field :updated_at, type: Time, required: true, default: -> { Time.now }
 

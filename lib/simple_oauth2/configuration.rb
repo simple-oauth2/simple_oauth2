@@ -65,8 +65,6 @@ module Simple
       # the original Access Token found by token value
       attr_accessor :on_refresh
 
-      attr_accessor :server_abstract_request
-
       # Return a new instance of Configuration with default options
       def initialize
         setup!
@@ -111,14 +109,6 @@ module Simple
         end
       end
 
-      def server_abstract_request(&block)
-        if block_given?
-          instance_variable_set(:'@server_abstract_request', block)
-        else
-          instance_variable_get(:'@server_abstract_request')
-        end
-      end
-
       # Default Access Token authenticator block.
       # Validates token value passed with the request params
       def default_token_authenticator
@@ -142,8 +132,6 @@ module Simple
         self.issue_refresh_token = DEFAULT_ISSUE_REFRESH_TOKEN
         self.on_refresh = :nothing
 
-        self.server_abstract_request = default_server_abstract_request
-
         self.realm = DEFAULT_REALM
       end
 
@@ -153,16 +141,6 @@ module Simple
           raise(
             'Resource Owner find failed due to '\
             'Simple::OAuth2.configure.resource_owner_authenticator being unconfigured.'
-          )
-        end
-      end
-
-      # Default abstract request
-      def default_server_abstract_request
-        lambda do
-          raise(
-            'Abstract request find failed due to '\
-            'Simple::OAuth2.configure.server_abstract_request being unconfigured.'
           )
         end
       end

@@ -3,9 +3,5 @@ Simple::OAuth2.configure do |config|
     User.first
   end
 
-  config.server_abstract_request do
-    request
-  end
-
   config.realm = 'Custom Realm'
 end

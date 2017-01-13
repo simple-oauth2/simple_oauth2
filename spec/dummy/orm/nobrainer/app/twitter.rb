@@ -21,6 +21,10 @@ module Twitter
     extend Twitter::Endpoints::Token
   end
 
+  class RevokeToken
+    extend Twitter::Endpoints::RevokeToken
+  end
+
   class CustomToken
     extend Twitter::Endpoints::CustomToken
   end

@@ -17,16 +17,12 @@ module Simple
 
       # Returns ResourceOwner from the AccessToken found by access_token value passed with the request
       def current_resource_owner
-        @current_resource_owner ||= begin
-          instance_eval(&Simple::OAuth2.config.resource_owner_authenticator) || current_access_token.resource_owner
-        end
+        @current_resource_owner ||= instance_eval(&Simple::OAuth2.config.resource_owner_authenticator)
       end
 
       # Returns AccessToken instance found by access_token value passed with the request
       def current_access_token
-        @current_access_token ||=
-          instance_eval(&Simple::OAuth2.config.server_abstract_request).
-          env[Rack::OAuth2::Server::Resource::ACCESS_TOKEN]
+        @current_access_token ||= request.env[Rack::OAuth2::Server::Resource::ACCESS_TOKEN]
       end
 
       private

@@ -1,7 +1,7 @@
 module Simple
   module OAuth2
     module Generators
-      # Token generator class
+      # Token generator class.
       # Processes the request by required Grant Type and builds the response
       class Token < Base
         class << self
@@ -21,6 +21,26 @@ module Simple
             end
 
             Simple::OAuth2::Responses.new(token.call(env))
+          end
+
+          # OAuth 2.0 Token Revocation - http://tools.ietf.org/html/rfc7009
+          #
+          # @return [Response] with HTTP status code 200
+          #
+          def revoke(token, env)
+            access_token = config.access_token_class.authenticate(token, 'refresh_token')
+
+            if access_token
+              request = Rack::OAuth2::Server::Token::Request.new(env)
+
+              # The authorization server, if applicable, first authenticates the client
+              # and checks its ownership of the provided token.
+              client = Simple::OAuth2::Strategies::Base.authenticate_client(request) || request.invalid_client!
+              client.id == access_token.client.id && access_token.revoke!
+            end
+            # The authorization server responds with HTTP status code 200 if the token
+            # has been revoked successfully or if the client submitted an invalid token
+            [200, {}, []]
           end
 
           private

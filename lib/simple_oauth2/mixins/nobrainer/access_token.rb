@@ -18,17 +18,17 @@ module Simple
                                       foreign_key: :resource_owner_id, primary_key: :id
 
           field :resource_owner_id, type: String, index: true, required: true
-          field :client_id, type: String, required: true, index: true
+          field :client_id,         type: String, index: true, required: true
           field :token,
                 type: String,
+                index: true,
                 required: true,
                 uniq: true,
-                index: true,
                 default: -> { Simple::OAuth2.config.token_generator.generate }
           field :refresh_token,
                 type: String,
-                uniq: true,
                 index: true,
+                uniq: true,
                 default: -> do
                   if Simple::OAuth2.config.issue_refresh_token
                     Simple::OAuth2.config.token_generator.generate
@@ -36,10 +36,11 @@ module Simple
                     ''
                   end
                 end
-          field :scopes, type: String
 
-          field :expires_at, type: Time, required: true
+          field :scopes,     type: String
+
           field :revoked_at, type: Time
+          field :expires_at, type: Time, required: true
           field :created_at, type: Time, required: true, default: -> { Time.now }
           field :updated_at, type: Time, required: true, default: -> { Time.now }
 
@@ -52,12 +53,13 @@ module Simple
               )
             end
 
-            def authenticate(token, type = nil)
-              t = token.to_s
-              if type.to_s == 'refresh_token'
-                where(refresh_token: t).first
+            def authenticate(token, token_type_hint = nil)
+              return if token.blank?
+
+              if token_type_hint == 'refresh_token'
+                where(refresh_token: token).first
               else
-                where(token: t).first
+                where(token: token).first
               end
             end
           end
@@ -70,8 +72,8 @@ module Simple
             revoked_at && revoked_at <= Time.now.utc
           end
 
-          def revoke!(revoked_at = Time.now)
-            update!(revoked_at: revoked_at.utc)
+          def revoke!(revoked_at = Time.now.utc)
+            update!(revoked_at: revoked_at)
           end
 
           def to_bearer_token
@@ -87,7 +89,7 @@ module Simple
 
           def setup_expiration
             expires_in = Simple::OAuth2.config.access_token_lifetime.to_i
-            self.expires_at = Time.now + expires_in if expires_at.nil? && !expires_in.nil?
+            self.expires_at = Time.now.utc + expires_in if expires_at.nil? && !expires_in.nil?
           end
         end
       end

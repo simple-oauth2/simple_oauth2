@@ -1,20 +1,40 @@
 module Simple
   module OAuth2
     # Processes Rack Responses and contains helper methods
-    # Rack::Response to process
     #
-    # @return [Array] Rack response
+    # @return [Object] Rack response
     #
     # @example
-    #   response = Simple::OAuth2::Responses.new([200, {}, Rack::BodyProxy.new('200')])
+    #   rack_response = [
+    #     200,
+    #     { 'Content-Type' => 'application/json' },
+    #     Rack::BodyProxy.new(Rack::Response.new('200'.to_json))
+    #   ]
+    #   response = Simple::OAuth2::Responses.new(rack_response)
     #
-    #   #=> [200, {}, Rack::BodyProxy.new('200')]
+    #   response.status  #=> 200
+    #   response.headers #=> {}
+    #   response.body    #=> '200'
+    #   response         #=> <Simple::OAuth2::Responses:0x007fc9f32080b8 @response=[
+    #     200,
+    #     {},
+    #     <Rack::BodyProxy:0x007fc9f3208108
+    #       @block=nil,
+    #       @body= <Rack::Response:0x007fc9f3208388
+    #         @block=nil,
+    #         @body=["\"200\""],
+    #         @header={"Content-Length"=>"5"},
+    #         @length=5,
+    #         @status=200
+    #       >,
+    #       @closed=false
+    #     >
+    #   ]
     #
     class Responses
       # Simple::OAuth2 response class
       #
-      # @param response [Array]
-      #   raw Rack::Response object
+      # @param response [Array] raw Rack::Response object
       #
       def initialize(response)
         @response = response

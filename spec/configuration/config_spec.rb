@@ -48,7 +48,6 @@ describe Simple::OAuth2::Configuration do
     it { expect(config.scopes_validator_class_name).to eq(Simple::OAuth2::Scopes.name) }
 
     it { expect { config.resource_owner_authenticator.call('test') }.to raise_error(RuntimeError) }
-    it { expect { config.server_abstract_request.call }.to raise_error(RuntimeError) }
   end
 
   context 'custom config' do

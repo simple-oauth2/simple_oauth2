@@ -21,6 +21,7 @@ require 'simple_oauth2/strategies/authorization_code'
 require 'simple_oauth2/strategies/refresh_token'
 require 'simple_oauth2/strategies/code'
 require 'simple_oauth2/strategies/token'
+require 'simple_oauth2/strategies/client_credentials'
 
 # Generators
 require 'simple_oauth2/generators/base'

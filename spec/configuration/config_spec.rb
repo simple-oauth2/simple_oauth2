@@ -40,7 +40,7 @@ describe Simple::OAuth2::Configuration do
     it { expect(config.authorization_code_lifetime).to eq(1800) }
 
     it { expect(config.realm).to eq(Simple::OAuth2::Configuration::DEFAULT_REALM) }
-    it { expect(config.allowed_grant_types).to eq(%w(password authorization_code refresh_token)) }
+    it { expect(config.allowed_grant_types).to eq(%w(password authorization_code refresh_token client_credentials)) }
 
     it { expect(config.issue_refresh_token).to be_falsey }
     it { expect(config.on_refresh).to eq(:nothing) }

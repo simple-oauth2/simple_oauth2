@@ -1,7 +1,7 @@
 module Simple
   module OAuth2
     module Strategies
-      # Code strategy class
+      # Code strategy class.
       # Processes request and respond with Code
       class Code < Base
         class << self

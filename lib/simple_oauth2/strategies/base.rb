@@ -23,7 +23,7 @@ module Simple
 
           # Exposes token object to Bearer token.
           #
-          # @param token [#to_bearer_token] any object that responds to `to_bearer_token`
+          # @param token [AccessToken] any object that responds to `to_bearer_token`
           # @return [Rack::OAuth2::AccessToken::Bearer] bearer token instance
           #
           def expose_to_bearer_token(token)

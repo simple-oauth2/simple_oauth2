@@ -2,7 +2,7 @@ module Simple
   module OAuth2
     module Strategies
       # Token strategy class
-      # Processes request and respond with Code
+      # Processes request and respond with Access Token
       class Token < Base
         class << self
           # Processes Token request

@@ -58,8 +58,8 @@ describe Simple::OAuth2::Configuration do
     end
 
     class CustomTokenGenerator
-      def self.generate(number = nil)
-        if number
+      def self.generate(options = {})
+        if options[:custom]
           'custom_token'
         else
           'default_token'
@@ -97,7 +97,7 @@ describe Simple::OAuth2::Configuration do
       end
 
       it { expect(Simple::OAuth2.config.token_generator.generate).to eq('default_token') }
-      it { expect(Simple::OAuth2.config.token_generator.generate(15)).to eq('custom_token') }
+      it { expect(Simple::OAuth2.config.token_generator.generate(custom: true)).to eq('custom_token') }
     end
 
     context 'invokes custom scopes validator' do

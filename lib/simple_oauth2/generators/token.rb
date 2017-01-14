@@ -62,7 +62,7 @@ module Simple
           # @return [Password, RefreshToken, AuthorizationCode] strategy class
           #
           def find_strategy(grant_type)
-            "Simple::OAuth2::Strategies::#{grant_type.to_s.classify}".constantize
+            "Simple::OAuth2::Strategies::#{grant_type.to_s.camelize}".constantize
           end
         end
       end

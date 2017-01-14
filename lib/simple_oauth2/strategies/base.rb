@@ -13,7 +13,11 @@ module Simple
 
           # Authenticates Resource Owner from the request
           def authenticate_resource_owner(client, request)
-            config.resource_owner_class.oauth_authenticate(client, request.username, request.password)
+            config.resource_owner_class.oauth_authenticate(
+              client,
+              request.params['username'],
+              request.params['password']
+            )
           end
 
           # Authenticates Access Grant from the request

@@ -3,7 +3,7 @@ module Simple
     # Simple::OAuth2 default constants
     module Constants
       # Currently supported (by the gem) OAuth2 grant types
-      SUPPORTED_GRANT_TYPES = %w(password authorization_code refresh_token).freeze
+      SUPPORTED_GRANT_TYPES = %w(password authorization_code refresh_token client_credentials).freeze
 
       # Default OAuth2 response types
       SUPPORTED_RESPONSE_TYPES = %w(code token).freeze

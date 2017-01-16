@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.description = 'A flexible OAuth2 server authorization'
   s.authors     = ['Volodimir Partytskyi']
   s.email       = 'volodimir.partytskyi@gmail.com'
-  s.homepage    = 'https://github.com/0bman/simple_oauth2'
+  s.homepage    = 'https://github.com/simple-oauth2/simple_oauth2'
   s.license     = 'MIT'
 
   s.require_paths = %w(lib)

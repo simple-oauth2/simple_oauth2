@@ -12,7 +12,7 @@ module Simple
     # Contains detailed info about gem version
     module VERSION
       # Level changes for implementation level detail changes, such as small bug fixes
-      PATCH = 1
+      PATCH = 0
       # Level changes for any backwards compatible API changes, such as new functionality/features
       MINOR = 0
       # Level changes for backwards incompatible API changes,

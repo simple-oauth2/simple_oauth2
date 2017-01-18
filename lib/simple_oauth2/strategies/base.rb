@@ -8,7 +8,7 @@ module Simple
         class << self
           # Authenticates Client from the request
           def authenticate_client(request)
-            config.client_class.authenticate(request.client_id)
+            config.client_class.by_key(request.client_id)
           end
 
           # Authenticates Resource Owner from the request
@@ -22,7 +22,7 @@ module Simple
 
           # Authenticates Access Grant from the request
           def authenticate_access_grant(request)
-            config.access_grant_class.authenticate(request.code)
+            config.access_grant_class.by_token(request.code)
           end
 
           # Exposes token object to Bearer token.

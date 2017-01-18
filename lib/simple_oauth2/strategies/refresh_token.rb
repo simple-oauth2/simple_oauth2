@@ -22,7 +22,7 @@ module Simple
 
           # Check refresh token and client id for exact matching verifier
           def verify_refresh_token!(request, client_id)
-            refresh_token = config.access_token_class.authenticate(request.refresh_token, 'refresh_token')
+            refresh_token = config.access_token_class.by_refresh_token(request.refresh_token)
             refresh_token || request.invalid_grant!
             refresh_token.client_id == client_id || request.unauthorized_client!
 

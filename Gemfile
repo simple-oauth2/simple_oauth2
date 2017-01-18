@@ -6,6 +6,7 @@ gem 'rack-oauth2'
 
 group :test do
   gem 'nobrainer'
+  gem 'nobrainer_simple_oauth2'
 
   gem 'coveralls', require: false
   gem 'ffaker'

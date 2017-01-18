@@ -28,7 +28,7 @@ module Simple
           # @return [Response] with HTTP status code 200
           #
           def revoke(token, env)
-            access_token = config.access_token_class.authenticate(token, 'refresh_token')
+            access_token = config.access_token_class.by_refresh_token(token)
 
             if access_token
               request = Rack::OAuth2::Server::Token::Request.new(env)

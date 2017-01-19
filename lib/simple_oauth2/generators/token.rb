@@ -9,15 +9,10 @@ module Simple
           #
           # @return [Simple::OAuth2::Responses] response
           #
-          def generate_for(env, &_block)
+          def generate_for(env, &block)
             token = Rack::OAuth2::Server::Token.new do |request, response|
               request.unsupported_grant_type! unless allowed_grants.include?(request.grant_type.to_s)
-
-              if block_given?
-                yield(request, response)
-              else
-                execute_default(request, response)
-              end
+              execute(request, response, &block)
             end
 
             Simple::OAuth2::Responses.new(token.call(env))
@@ -45,24 +40,16 @@ module Simple
 
           private
 
-          # Runs default Simple::OAuth2 functionality for Token endpoint.
+          # Runs default Simple::OAuth2 functionality for Token endpoint
           #
           # @param request [Rack::Request] request object
           # @param response [Rack::Response] response object
           #
+          # @return [String] response access_token
+          #
           def execute_default(request, response)
             strategy = find_strategy(request.grant_type) || request.invalid_grant!
             response.access_token = strategy.process(request)
-          end
-
-          # Returns Simple::OAuth2 strategy class by Grant Type
-          #
-          # @param grant_type [Symbol] grant type value
-          #
-          # @return [Password, RefreshToken, AuthorizationCode] strategy class
-          #
-          def find_strategy(grant_type)
-            "Simple::OAuth2::Strategies::#{grant_type.to_s.camelize}".constantize
           end
         end
       end

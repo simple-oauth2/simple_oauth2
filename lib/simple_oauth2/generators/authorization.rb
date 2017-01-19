@@ -9,15 +9,10 @@ module Simple
           #
           # @return [Simple::OAuth2::Responses] response
           #
-          def generate_for(env, &_block)
+          def generate_for(env, &block)
             authorization = Rack::OAuth2::Server::Authorize.new do |request, response|
               request.unsupported_response_type! unless allowed_types.include?(request.response_type.to_s)
-
-              if block_given?
-                yield request, response
-              else
-                execute_default(request, response)
-              end
+              execute(request, response, &block)
             end
 
             Simple::OAuth2::Responses.new(authorization.call(env))
@@ -46,16 +41,6 @@ module Simple
             find_strategy(request.response_type).process(request, response)
             response.approve!
             response
-          end
-
-          # Returns Simple::OAuth2 strategy class by Response Type
-          #
-          # @param response_type [Symbol] response type value
-          #
-          # @return [Code, Token] strategy class
-          #
-          def find_strategy(response_type)
-            "Simple::OAuth2::Strategies::#{response_type.to_s.classify}".constantize
           end
         end
       end

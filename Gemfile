@@ -8,6 +8,7 @@ group :test do
   gem 'nobrainer'
   gem 'nobrainer_simple_oauth2'
 
+  gem 'codeclimate-test-reporter', '~> 1.0.0'
   gem 'coveralls', require: false
   gem 'ffaker'
   gem 'rack-test', require: 'rack/test'

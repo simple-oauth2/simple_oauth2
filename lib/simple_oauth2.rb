@@ -7,13 +7,6 @@ require 'simple_oauth2/scopes'
 require 'simple_oauth2/uniq_token'
 require 'simple_oauth2/resource/bearer'
 
-# Mixins
-if defined?(NoBrainer::Document)
-  require 'simple_oauth2/mixins/nobrainer/access_token'
-  require 'simple_oauth2/mixins/nobrainer/access_grant'
-  require 'simple_oauth2/mixins/nobrainer/client'
-end
-
 # Authorization Grants aka Flows (Strategies)
 require 'simple_oauth2/strategies/base'
 require 'simple_oauth2/strategies/password'

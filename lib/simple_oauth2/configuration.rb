@@ -113,7 +113,7 @@ module Simple
       # Validates token value passed with the request params
       def default_token_authenticator
         lambda do |request|
-          access_token_class.authenticate(request.access_token) || request.invalid_token!
+          access_token_class.by_token(request.access_token) || request.invalid_token!
         end
       end
 

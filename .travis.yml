@@ -21,11 +21,5 @@ matrix:
     - rvm: ruby-head
   include:
   - rvm: 2.2.6
-    gemfile: gemfiles/nobrainer.rb
-    env: ORM=nobrainer
   - rvm: 2.3.3
-    gemfile: gemfiles/nobrainer.rb
-    env: ORM=nobrainer
   - rvm: ruby-head
-    gemfile: gemfiles/nobrainer.rb
-    env: ORM=nobrainer

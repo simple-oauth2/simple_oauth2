@@ -22,6 +22,7 @@ end
 
 require 'rack/test'
 require 'ffaker'
+require 'nobrainer_simple_oauth2'
 require ORM_GEMS_MAPPING[ENV['ORM']]
 require File.expand_path("../dummy/orm/#{ENV['ORM']}/app/twitter", __FILE__)
 

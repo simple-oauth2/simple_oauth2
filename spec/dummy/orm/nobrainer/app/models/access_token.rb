@@ -1,3 +1,3 @@
 class AccessToken
-  include Simple::OAuth2::NoBrainer::AccessToken
+  include NoBrainer::Simple::OAuth2::AccessToken
 end

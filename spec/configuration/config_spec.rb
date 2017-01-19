@@ -4,7 +4,7 @@ describe Simple::OAuth2::Configuration do
   let(:config) { described_class.new }
 
   class CustomClient
-    def self.authenticate(_key, _secret = nil)
+    def self.by_key(_key)
       'Test'
     end
   end
@@ -12,7 +12,11 @@ describe Simple::OAuth2::Configuration do
   class CustomAccessToken
     def self.create_for(_client, _resource_owner, _scopes = nil); end
 
-    def self.authenticate(_token, _type = nil)
+    def self.by_token(_token)
+      'Test'
+    end
+
+    def self.by_refresh_token(_refresh_token)
       'Test'
     end
 
@@ -105,11 +109,11 @@ describe Simple::OAuth2::Configuration do
     end
 
     context 'works with custom Access Token class' do
-      it { expect(config.access_token_class.authenticate('')).to eq('Test') }
+      it { expect(config.access_token_class.by_token('')).to eq('Test') }
     end
 
     context 'works with custom Client class' do
-      it { expect(config.client_class.authenticate('')).to eq('Test') }
+      it { expect(config.client_class.by_key('')).to eq('Test') }
     end
 
     context 'works with custom Resource Owner class' do

@@ -1,3 +1,3 @@
 class AccessGrant
-  include Simple::OAuth2::NoBrainer::AccessGrant
+  include NoBrainer::Simple::OAuth2::AccessGrant
 end

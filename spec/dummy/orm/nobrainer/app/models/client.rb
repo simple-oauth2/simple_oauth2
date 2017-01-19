@@ -1,3 +1,3 @@
 class Client
-  include Simple::OAuth2::NoBrainer::Client
+  include NoBrainer::Simple::OAuth2::Client
 end

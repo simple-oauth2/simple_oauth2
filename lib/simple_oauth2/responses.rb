@@ -1,8 +1,8 @@
 module Simple
   module OAuth2
-    # Processes Rack Responses and contains helper methods
+    # Processes Rack Responses and contains helper methods.
     #
-    # @return [Object] Rack response
+    # @return [Object] Rack response.
     #
     # @example
     #   rack_response = [
@@ -32,25 +32,30 @@ module Simple
     #   ]
     #
     class Responses
-      # Simple::OAuth2 response class
+      # Simple::OAuth2 response class.
       #
-      # @param response [Array] raw Rack::Response object
+      # @param response [Array] raw Rack::Response object.
+      #
+      # @return [Object] instance.
       #
       def initialize(response)
         @response = response
       end
 
-      # Response status
+      # Response status.
+      #
+      # @return [Integer] status.
+      #
       def status
         @response[0]
       end
 
-      # Response headers
+      # Response headers.
       def headers
         @response[1]
       end
 
-      # Response JSON-parsed body
+      # Response JSON-parsed body.
       def body
         response_body = @response[2].body.first
         return {} if response_body.nil? || response_body.empty?

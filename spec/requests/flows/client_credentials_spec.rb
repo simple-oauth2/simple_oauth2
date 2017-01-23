@@ -11,11 +11,13 @@ describe 'Token Endpoint' do
   let(:username) { user.username }
   let(:password) { user.encrypted_password }
   let(:client_id) { client.key }
+  let(:client_secret) { client.secret }
   let(:params) do
     {
       username: username,
       password: password,
       client_id: client_id,
+      client_secret: client_secret,
       grant_type: grant_type,
       scope: scopes
     }
@@ -123,6 +125,34 @@ describe 'Token Endpoint' do
 
         context 'with invalid client_id' do
           let(:client_id) { 'invalid' }
+          let(:error_description) do
+            'The client identifier provided is invalid, the client failed to authenticate, '\
+            'the client did not include its credentials, provided multiple client credentials, '\
+            'or used unsupported credentials type.'
+          end
+
+          it { expect(AccessToken.count).to be_zero }
+          it { expect(json_body[:error]).to eq('invalid_client') }
+          it { expect(json_body[:error_description]).to eq(error_description) }
+          it { expect(last_response.status).to eq 401 }
+        end
+
+        context 'without client_secret' do
+          let(:client_secret) {}
+          let(:error_description) do
+            'The client identifier provided is invalid, the client failed to authenticate, '\
+            'the client did not include its credentials, provided multiple client credentials, '\
+            'or used unsupported credentials type.'
+          end
+
+          it { expect(AccessToken.count).to be_zero }
+          it { expect(json_body[:error]).to eq('invalid_client') }
+          it { expect(json_body[:error_description]).to eq error_description }
+          it { expect(last_response.status).to eq 401 }
+        end
+
+        context 'with invalid client_secret' do
+          let(:client_secret) { 'invalid' }
           let(:error_description) do
             'The client identifier provided is invalid, the client failed to authenticate, '\
             'the client did not include its credentials, provided multiple client credentials, '\

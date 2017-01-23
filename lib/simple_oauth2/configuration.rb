@@ -1,71 +1,71 @@
 module Simple
   module OAuth2
     # Simple::OAuth2 configuration class.
-    # Contains default or customized options that would be used in OAuth2 endpoints and helpers
+    # Contains default or customized options that would be used in OAuth2 endpoints and helpers.
     class Configuration
       include ClassAccessors
       include Constants
 
-      # The names of the classes that represents OAuth2 roles
+      # The names of the classes that represents OAuth2 roles.
       #
-      # @return [String] class name
+      # @return [String] class name.
       #
       attr_accessor :access_token_class_name, :access_grant_class_name,
                     :client_class_name, :resource_owner_class_name
 
-      # Class name for the OAuth2 helper class that generates unique token values
+      # Class name for the OAuth2 helper class that generates unique token values.
       #
-      # @return [String] token generator class name
+      # @return [String] token generator class name.
       #
       attr_accessor :token_generator_class_name
 
-      # Class name for the OAuth2 helper class that validates requested scopes against Access Token scopes
+      # Class name for the OAuth2 helper class that validates requested scopes against Access Token scopes.
       #
-      # @return [String] scope validator class name
+      # @return [String] scope validator class name.
       #
       attr_accessor :scopes_validator_class_name
 
-      # Access Token and Authorization Code lifetime in seconds
+      # Access Token and Authorization Code lifetime in seconds.
       #
-      # @return [Integer] lifetime in seconds
+      # @return [Integer] lifetime in seconds.
       #
       attr_accessor :authorization_code_lifetime, :access_token_lifetime
 
-      # OAuth2 grant types (flows) allowed to be processed
+      # OAuth2 grant types (flows) allowed to be processed.
       #
-      # @return [Array<String>] grant types
+      # @return [Array<String>] grant types.
       #
       attr_accessor :allowed_grant_types
 
-      # OAuth2 response types (flows) allowed to be processed
+      # OAuth2 response types (flows) allowed to be processed.
       #
-      # @return [Array<String>] response types
+      # @return [Array<String>] response types.
       #
       attr_accessor :allowed_response_types
 
-      # Realm value
+      # Realm value.
       #
-      # @return [String] realm
+      # @return [String] realm.
       #
       attr_accessor :realm
 
-      # Access Token authenticator block option for customization
+      # Access Token authenticator block option for customization.
       attr_accessor :token_authenticator
 
-      # Resource Owner authenticator block option for customization
+      # Resource Owner authenticator block option for customization.
       attr_accessor :resource_owner_authenticator
 
-      # Specifies whether to generate a Refresh Token when creating an Access Token
+      # Specifies whether to generate a Refresh Token when creating an Access Token.
       #
-      # @return [Boolean] true if need to generate refresh token
+      # @return [Boolean] true if need to generate refresh token.
       #
       attr_accessor :issue_refresh_token
 
       # Callback that would be invoked during processing of Refresh Token request for
-      # the original Access Token found by token value
+      # the original Access Token found by token value.
       attr_accessor :on_refresh
 
-      # Return a new instance of Configuration with default options
+      # Return a new instance of Configuration with default options.
       def initialize
         setup!
       end
@@ -93,7 +93,7 @@ module Simple
       # Indicates if on_refresh callback can be invoked.
       #
       # @return [Boolean]
-      #   true if callback can be invoked and false in other cases
+      #   true if callback can be invoked and false in other cases.
       #
       def on_refresh_runnable?
         !on_refresh.nil? && on_refresh != :nothing
@@ -110,7 +110,7 @@ module Simple
       end
 
       # Default Access Token authenticator block.
-      # Validates token value passed with the request params
+      # Validates token value passed with the request params.
       def default_token_authenticator
         lambda do |request|
           access_token_class.by_token(request.access_token) || request.invalid_token!
@@ -119,7 +119,7 @@ module Simple
 
       private
 
-      # Setup configuration to default options values
+      # Setup configuration to default options values.
       def setup!
         init_classes
         init_authenticators
@@ -135,7 +135,7 @@ module Simple
         self.realm = DEFAULT_REALM
       end
 
-      # Default Resource Owner authenticator block
+      # Default Resource Owner authenticator block.
       def default_resource_owner_authenticator
         lambda do |_request|
           raise(
@@ -145,19 +145,19 @@ module Simple
         end
       end
 
-      # Sets OAuth2 helpers classes to gem defaults
+      # Sets OAuth2 helpers classes to gem defaults.
       def init_classes
         self.token_generator_class_name = Simple::OAuth2::UniqToken.name
         self.scopes_validator_class_name = Simple::OAuth2::Scopes.name
       end
 
-      # Sets authenticators to gem defaults
+      # Sets authenticators to gem defaults.
       def init_authenticators
         self.token_authenticator = default_token_authenticator
         self.resource_owner_authenticator = default_resource_owner_authenticator
       end
 
-      # Sets OAuth2 represents roles
+      # Sets OAuth2 represents roles.
       def init_represents_roles
         self.access_token_class_name = DEFAULT_ACCESS_TOKEN_CLASS
         self.resource_owner_class_name = DEFAULT_RESOURCE_OWNER_CLASS

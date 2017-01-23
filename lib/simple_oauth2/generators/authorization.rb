@@ -1,13 +1,12 @@
 module Simple
   module OAuth2
     module Generators
-      # Authorization generator class
-      # Processes the request by required Response Type and builds the response
+      # Authorization generator class. Processes the request by required Response Type and builds the response.
       class Authorization < Base
         class << self
-          # Generates Authorization Response based on the request
+          # Generates Authorization Response based on the request.
           #
-          # @return [Simple::OAuth2::Responses] response
+          # @return [Simple::OAuth2::Responses] response.
           #
           def generate_for(env, &block)
             authorization = Rack::OAuth2::Server::Authorize.new do |request, response|
@@ -22,7 +21,7 @@ module Simple
 
           private
 
-          # Returns error Rack::Response
+          # Returns error Rack::Response.
           def error_response(error)
             response = Rack::Response.new
             response.status = error.status
@@ -32,10 +31,10 @@ module Simple
             Simple::OAuth2::Responses.new(response.finish)
           end
 
-          # Runs default Simple::OAuth2 functionality for Authorization endpoint
+          # Runs default Simple::OAuth2 functionality for Authorization endpoint.
           #
-          # @param request [Rack::Request] request object
-          # @param response [Rack::Response] response object
+          # @param request [Rack::Request] request object.
+          # @param response [Rack::Response] response object.
           #
           def execute_default(request, response)
             find_strategy(request.response_type).process(request, response)

@@ -1,17 +1,15 @@
 module Simple
   module OAuth2
     # OAuth2 helper for generation of unique token values.
-    # Can process custom payload and options
+    # Can process custom payload and options.
     module UniqToken
-      # Generates unique token value
+      # Generates unique token value.
       #
-      # @param _payload [Hash]
-      #   payload
-      # @param options [Hash]
-      #   options for generator
+      # @param _payload [Hash] payload.
+      # @param options [Hash] options for generator.
       #
-      # @return [String]
-      #   unique token value
+      # @return [String] unique token value.
+      #
       def self.generate(_payload = {}, options = {})
         SecureRandom.hex(options.delete(:size) || 32)
       end

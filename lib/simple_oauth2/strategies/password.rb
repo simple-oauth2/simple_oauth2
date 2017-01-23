@@ -11,7 +11,7 @@ module Simple
 
             resource_owner = authenticate_resource_owner(client, request) || request.invalid_grant!
 
-            token = config.access_token_class.create_for(client, resource_owner, request.scope.join(','))
+            token = config.access_token_class.create_for(client, resource_owner, scopes_from(request))
             expose_to_bearer_token(token)
           end
         end

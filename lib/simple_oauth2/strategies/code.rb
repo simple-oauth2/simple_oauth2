@@ -13,7 +13,7 @@ module Simple
               client,
               config.resource_owner_authenticator.call(request),
               response.redirect_uri,
-              request.scope.join(',')
+              scopes_from(request)
             )
 
             response.code = authorization_code.token

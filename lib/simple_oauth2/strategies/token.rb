@@ -12,7 +12,7 @@ module Simple
             access_token = config.access_token_class.create_for(
               client,
               config.resource_owner_authenticator.call(request),
-              request.scope.join(',')
+              scopes_from(request)
             )
 
             response.access_token = expose_to_bearer_token(access_token)

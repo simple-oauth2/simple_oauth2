@@ -48,6 +48,16 @@ module Simple
             client
           end
 
+          # Converts scopes from the request string. Separate them by the whitespace.
+          #
+          # @return [String] scopes string
+          #
+          def scopes_from(request)
+            return if request.scope.nil?
+
+            request.scope.join
+          end
+
           private
 
           # Short getter for Simple::OAuth2 configuration.

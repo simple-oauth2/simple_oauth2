@@ -55,7 +55,7 @@ describe 'GET Protected Resources' do
 
     context 'returns status for endpoint with specific set of scopes' do
       let(:url) { '/api/v1/status/multiple_scopes' }
-      let(:scopes) { 'read,write' }
+      let(:scopes) { 'read write' }
 
       it { expect(last_response.status).to eq 200 }
       it { expect(json_body[:value]).to eq('Access read, write') }

@@ -49,7 +49,7 @@ module Simple
         collection = if scopes.is_a?(Array) || scopes.respond_to?(:to_a)
                        scopes.to_a
                      elsif scopes.is_a?(String) || scopes.is_a?(Symbol)
-                       scopes.split(',')
+                       scopes.split
                      end
 
         collection.map(&:to_s)

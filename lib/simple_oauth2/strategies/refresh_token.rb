@@ -11,7 +11,7 @@ module Simple
             refresh_token = verify_refresh_token!(request, client.id)
 
             token = config.access_token_class.create_for(
-              client, refresh_token.resource_owner, request.scope.join(',')
+              client, refresh_token.resource_owner, scopes_from(request)
             )
             run_callback_on_refresh_token(refresh_token) if config.on_refresh_runnable?
 

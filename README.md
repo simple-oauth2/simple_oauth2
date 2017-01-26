@@ -53,7 +53,9 @@ Or install it yourself as:
 The example below, it's a simple **Rack** application.
 
 1) You need to choose the **mixin** for your ORM and setup it. Please read the documentation about *mixin*. The list of mixins you can take a look at [here](#list-of-mixins).
+
 If you want to use this gem, but you can't find the mixin that you need, so then you have to create at least 4 classes (models) to cover OAuth2 roles and define a specific set to API for them as described [HERE](https://github.com/simple-oauth2/simple_oauth2/blob/master/OTHER_ORMS.md).
+
 You can take a look at the **mixins** to understand what they are doing and what they are returning.
 
 2) **Important**. You need to create a file and put it in some place, that will be processed at the application startup. Also you need to configure *SimpleOAuth2* in order to provide authentication block.
@@ -300,7 +302,8 @@ And set that class as scopes validator in the Simple::OAuth2 config:
 
 ## Custom token generator
 
-If you want to use JSON Web Tokens as a value for your Access Tokens, than you need to implement your custom Token Generator. First of all add [jwt gem](https://github.com/jwt/ruby-jwt) to your Gemfile:
+If you want to use JSON Web Tokens as a value for your Access Tokens, than you need to implement your custom Token Generator. First of all add [jwt gem](https://github.com/jwt/ruby-jwt) to your Gemfile
+
 If will do the main work for us in accordance to RFC 7519 standard. Now define custom token generator class:
 ```ruby
   class JWTGenerator
@@ -333,7 +336,9 @@ And set it as a token generator class in the Simple::OAuth2 config:
 
 ## Process token on Refresh (protect against Replay Attacks)
 
-If you want to do something with the original AccessToken that was used with the RefreshToken Flow, then you need to setup on_refresh configuration option. By default Simple::OAuth2 gem does nothing on token refresh and that option is set to :nothing. You can set it to the symbol (in that case AccessToken instance must respond to it) or block. Look at the examples:
+If you want to do something with the original AccessToken that was used with the RefreshToken Flow, then you need to setup on_refresh configuration option.
+
+By default Simple::OAuth2 gem does nothing on token refresh and that option is set to :nothing. You can set it to the symbol (in that case AccessToken instance must respond to it) or block. Look at the examples:
 ```ruby
   Simple::OAuth2.configure do |config|
     # ...

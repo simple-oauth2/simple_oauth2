@@ -1,5 +1,6 @@
 AllCops:
   Exclude:
     - rethinkdb_data
+    - spec/**/*
 
 inherit_from: .rubocop_todo.yml

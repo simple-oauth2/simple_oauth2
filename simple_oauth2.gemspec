@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.homepage    = 'https://github.com/simple-oauth2/simple_oauth2'
   s.license     = 'MIT'
 
-  s.require_paths = %w(lib)
+  s.require_paths = %w[lib]
   s.files         = `git ls-files`.split($RS)
 
   s.required_ruby_version = '>= 2.2.2'

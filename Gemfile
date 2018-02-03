@@ -13,8 +13,8 @@ group :test do
   gem 'ffaker'
   gem 'rack-test', require: 'rack/test'
   gem 'rspec-rails', '~> 3.4'
-  gem 'rubocop', '~> 0.46.0', require: false
+  gem 'rubocop', '~> 0.49.0', require: false
   gem 'simplecov', require: false
 end
 
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
